@@ -18,27 +18,33 @@ class RecipeInput extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleNewIngredient = this.handleNewIngredient.bind(this);
         this.handleChangeIng = this.handleChangeIng.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     };
 
     handleChange(e) {
-        this.setState(
-            { [e.target.name]: e.target.value }
-        )
+        this.setState({[e.target.name]: e.target.value });
     }
     handleNewIngredient(e) {
         const {ingredients} = this.state;
-        this.setState({ingerdients: [...ingredients, '']});
+        this.setState({ingredients: [...ingredients, '']});
     }
     handleChangeIng(e) {
         const index = Number(e.target.name.split('-')[1])
         const ingredients = this.state.ingredients.map((ing, i) => (
             i === index ? e.target.value : ing
         ))
-        this.setState(
-            { ingredients }
-        )
+        this.setState({ ingredients });
     }
-
+    handleSubmit(e){
+        e.preventDefault();
+        this.props.onSave({...this.state});
+        this.setState({ 
+            title:'',
+            instructions: '',
+            ingredients: [''],
+            img: ''
+        })
+    }
     render() {
         const {title, instructions, img, ingredients} = this.state;
         const {onClose} = this.props;
@@ -49,12 +55,12 @@ class RecipeInput extends Component {
             >
                 <label>{i+1}.
                     <input
-                        type = "text"
-                        name = {`ingredients-${i}`}
-                        value = {ing}
-                        size = {45}
-                        autoComplet = "off"
-                        placeholder = " Ingredient"
+                        type="text"
+                        name={`ingredients-${i}`}
+                        value={ing}
+                        size={45}
+                        autoComplet="off"
+                        placeholder=" Ingredient"
                         onChange={this.handleChangeIng}/>
                 </label>
             </div>
